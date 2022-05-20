@@ -19,42 +19,7 @@ int main()
     bool debug = false;
     int len = 128;
 
-/*
 
-    HELIB_NTIMER_START(timer_Context);
-    helib::Context context = helib::ContextBuilder<helib::BGV>()
-                               .m(m)
-                               .p(s)
-                               .r(r)
-                               .bits(bits)
-                               .c(c)
-                               .build();
-
-    helib::SecKey secret_key = helib::SecKey(context);
-    secret_key.GenSecKey();
-    helib::addSome1DMatrices(secret_key);
-    const helib::PubKey& public_key = secret_key;
-    const helib::EncryptedArray& ea = context.getEA();
-    long nslots = ea.size();
-    std::cout << "\nNumber of slots: " << nslots << std::endl;
-    helib::Ctxt encrypted_numbers(public_key);
-    helib::Ptxt<helib::BGV> ptxt(context);
-    ptxt[0] = W1;
-    public_key.Encrypt(encrypted_numbers,ptxt);
-    helib::Ptxt<helib::BGV> ptxt1(context);
-    ptxt1[0] = F;
-    helib::Ctxt c_f(public_key);
-    public_key.Encrypt(c_f,ptxt1);
-    std::cout << "\nNumber of  ptxt: " <<  ptxt << std::endl;
-    c_f.multiplyBy(encrypted_numbers);
-    c_f +=  encrypted_numbers;
-    helib::Ptxt<helib::BGV> new_plaintext_result(context);
-    secret_key.Decrypt(new_plaintext_result, c_f);
-    helib::Ptxt<helib::BGV> new_plaintext_result1(context);
-    secret_key.Decrypt(new_plaintext_result1, encrypted_numbers);
-    std::cout << "\nNumber of  ptxt: " <<  new_plaintext_result << std::endl;
-    std::cout << "\nNumber of  ptxt1: " <<  new_plaintext_result1 << std::endl;
-*/
 
 //Create 8 prime numbers p len = 16
     mpz_t q[9];
@@ -221,22 +186,20 @@ clock_t start,finish;
     const helib::PubKey& public_key8 = secret_key8;
     
 //we need w(alredy get) cw alpha1 calpha1 alpha2 calpha2 r1 cr1 r2 cr2 
-    mpz_t alpha_one,alpha_two,r_one,r_two;//,rrr,alpha;
+    mpz_t alpha_one,alpha_two,r_one,r_two;
     mpz_init(alpha_one);
-   // mpz_init(alpha);
+ 
     mpz_init(alpha_two);
     mpz_init(r_one);
     mpz_init(r_two);
-   // mpz_init(rrr);
+  
 
     Get_Big_Number(alpha_one,len);
     Get_Big_Number(alpha_two,len);
     Get_Big_Number(r_one,len);
     Get_Big_Number(r_two,len);
 
-  //  mpz_add(alpha,alpha_one,alpha_two);
-  //  mpz_add(rrr,r_one,r_two);
-
+  
 
 //let's start create ptxt and ctxt ; 
 //use tep to store tepdata ; 
@@ -254,11 +217,10 @@ clock_t start,finish;
             mpz_mod(tepm,W[i],q[j]);
             Dis_W[i][j] = mpz_get_ui(tepm);
       
-         //   printf("w[%d][%d] is %Zd\n",i,j,Dis_W[i][j]);
-        //   gmp_printf("prime is %Zd\n",tepm);
+    
             
         }
-      //  gmp_printf("w[i] is %Zd\n",W[i]);
+ 
     }
 
     //start to disperse alpha_one to Dis_alpha_one
@@ -269,7 +231,7 @@ clock_t start,finish;
         
         mpz_mod_ui(tepm,alpha_one,p[i]);
         Dis_alpha_one[i] = mpz_get_ui(tepm);
-     //   gmp_printf("alpha one is %Zd\n",tepm);
+   
     }
 
     //start to disperse alpha_two to Dis_alpha_two
@@ -278,7 +240,7 @@ clock_t start,finish;
     {
         mpz_mod_ui(tepm,alpha_two,p[i]);
         Dis_alpha_two[i] = mpz_get_ui(tepm);
-      //  gmp_printf("alpha two is %Zd\n",tepm);
+     
     }
 
     //start to disperse r_one to Dis_r_one
@@ -287,7 +249,7 @@ clock_t start,finish;
     {
         mpz_mod_ui(tepm,r_one,p[i]);
         Dis_r_one[i] = mpz_get_ui(tepm);
-      //  gmp_printf("r one is %Zd\n",tepm);
+    
     }
 
     //start to disperse r_two to Dis_r_two
@@ -296,7 +258,7 @@ clock_t start,finish;
     {
         mpz_mod_ui(tepm,r_two,p[i]);
         Dis_r_two[i] = mpz_get_ui(tepm);
-     //   gmp_printf("r two is %Zd\n",tepm);
+    
     }
 
 
@@ -340,9 +302,6 @@ clock_t start,finish;
         teep[i].emplace_back(ptxt7);
         teep[i].emplace_back(ptxt8);
         test.emplace_back(i,teep[i]);
-       // std::vector<helib::Ptxt<helib::BGV>>().swap(teep);
-     //  std::cout << "Number of  ptxt: " << i <<" "<< test[i].second[1][0] << std::endl;
-      //  printf("w[%d][1] is %Zd\n",i,Dis_W[i][1]);
     }
 
     //create ptxt to store Dis_alpha_one
@@ -368,16 +327,7 @@ clock_t start,finish;
     ptxt_Dis_alpha_one.emplace_back(ptxt7);
     ptxt_Dis_alpha_one.emplace_back(ptxt8);
 
-   /* 
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[0][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[1][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[2][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[3][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[4][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[5][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[6][0] << std::endl;
-    std::cout << "Number of  ptxt alpha: " << ptxt_Dis_alpha_one[7][0] << std::endl;
-*/
+  
     //create ptxt to store Dis_alpha_two
     std::vector<helib::Ptxt<helib::BGV>> ptxt_Dis_alpha_two;
     
@@ -401,17 +351,7 @@ clock_t start,finish;
     ptxt_Dis_alpha_two.emplace_back(ptxt7);
     ptxt_Dis_alpha_two.emplace_back(ptxt8);
 
-    /*
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[0][0] << std::endl;
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[1][0] << std::endl;
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[2][0] << std::endl;
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[3][0] << std::endl;
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[4][0] << std::endl;
-
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[5][0] << std::endl;
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[6][0] << std::endl;
-    std::cout << "Number of  ptxt alpha t: " << ptxt_Dis_alpha_two[7][0] << std::endl;
-    */
+ 
     //create ptxt to store Dis_r_one
     std::vector<helib::Ptxt<helib::BGV>> ptxt_Dis_r_one;
     
@@ -435,17 +375,7 @@ clock_t start,finish;
     ptxt_Dis_r_one.emplace_back(ptxt7);
     ptxt_Dis_r_one.emplace_back(ptxt8);
 
-    /*
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[0][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[1][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[2][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[3][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[4][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[5][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[6][0] << std::endl;
-    std::cout << "Number of  ptxt r: " << ptxt_Dis_r_one[7][0] << std::endl;
-
-    */
+  
     //create ptxt to store Dis_r_two
     std::vector<helib::Ptxt<helib::BGV>> ptxt_Dis_r_two;
     
@@ -470,16 +400,7 @@ clock_t start,finish;
     ptxt_Dis_r_two.emplace_back(ptxt7);
     ptxt_Dis_r_two.emplace_back(ptxt8);
 
-    /*
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[0][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[1][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[2][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[3][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[4][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[5][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[6][0] << std::endl;
-    std::cout << "Number of  ptxt r t: " << ptxt_Dis_r_two[7][0] << std::endl;
-    */
+
 
 //ready to encrypt
 
@@ -528,19 +449,7 @@ clock_t start,finish;
         
         C_W.emplace_back(i,C_tep[i]);
 
-        /*
-        secret_key0.Decrypt(dptxt0, C_W[i].second[0]);
-        secret_key1.Decrypt(dptxt1, C_W[i].second[1]);
-        secret_key2.Decrypt(dptxt2, C_W[i].second[2]);
-        secret_key3.Decrypt(dptxt3, C_W[i].second[3]);
-        secret_key4.Decrypt(dptxt4, C_W[i].second[4]);
-        secret_key5.Decrypt(dptxt5, C_W[i].second[5]);
-        secret_key6.Decrypt(dptxt6, C_W[i].second[6]);
-        secret_key7.Decrypt(dptxt7, C_W[i].second[7]);
-        secret_key8.Decrypt(dptxt8, C_W[i].second[8]);
-        */
-       // std::cout << "Number of  ctxt: " << i <<" "<< test[i].second[1] << std::endl;
-        //std::cout << "Number of  ctxt: " << i <<" "<< dptxt1 << std::endl;
+    
 
     }
 
@@ -710,8 +619,7 @@ long sk;
         stor_delta[i].emplace_back(dptxt8);
 
         P_delta.emplace_back(i,stor_delta[i]);
-        //std::cout << "Number of  ptxt: " << i <<" "<< P_delta[i].second[1][0] << std::endl;
-      //  std::vector<helib::Ptxt<helib::BGV>>().swap(stor_delta);
+    
     }
    
 
@@ -749,20 +657,9 @@ long sk;
             mpz_mul_ui(y,ti[j],ss);
             mpz_mul(y,y,Mi[j]);
             mpz_add(x[i],y,x[i]);  
-         //  std::cout << "Number of  ptxt: " << i <<" "<< ss<< std::endl;
-          // std::cout << "Number of  ptxt: " << i <<" "<< P_delta[i].second[j][0] << std::endl;
-           // std::cout << "\nNumber of  ptxt: " << i <<" "<< ss<< std::endl;
-         //  printf("p_delta :%d\n",P_delta[i].first);
+       
         }
         mpz_mod(x[i],x[i],M);
-     //   mpz_mul(tepm,W[i],alpha);
-     //   mpz_add(tepm,rrr,tepm);
-
-       
-        //mpz_mod(tepm,tepm,M);
-      //  gmp_printf("X[%d] is %Zd\n", i,x[i]);
-      //  gmp_printf("X[%d] is %Zd\n",i, tepm);
-      //  gmp_printf("M is %Zd\n",M);
 
     }
 
@@ -777,12 +674,7 @@ long sk;
         mpz_set(delta_two[i],r_two);
         mpz_neg(delta_two[i],delta_two[i]);
 
-      //  mpz_add(tepm,delta_one[i],delta_two[i]);
-      //  mpz_set(delta[i],tepm);
-      //  gmp_printf("delta is %Zd\n", tepm);
-      //  mpz_mul(tepm,W[i],alpha);
-     //   gmp_printf("delta is %Zd\n", tepm);
-     //   Compute_Glpha(tepm,Basic_Value.g,tepm,Basic_Value.p);
+ 
     }
 
 //now we get galpha_1 and galpha_2 and galpha
@@ -793,7 +685,7 @@ long sk;
     Compute_Glpha(galpha_one,Basic_Value.g,alpha_one,Basic_Value.p);
     Compute_Glpha(galpha_two,Basic_Value.g,alpha_two,Basic_Value.p);
     Compute_G_Mul(galpha,galpha_one,galpha_two,Basic_Value.p);
-	//gmp_printf("galpha is %Zd\n", galpha);
+
 
 	
 	
@@ -823,19 +715,11 @@ long sk;
         Compute_G_Mul(Y[i],Sever_Finall[i],gdelta2[i],Basic_Value.p);
         mpz_mul(Y[i],Commit[i].Commit_Value,Y[i]);
 	    mpz_mod(Y[i],Y[i],Basic_Value.p);
-	  //  gmp_printf("Y[%d] is %Zd\n", i,Y[i]);
-     //   Compute_Glpha(tepm,Basic_Value.g,W[i],Basic_Value.p);
-     //   mpz_mul(delta[i],W[i],alpha);
-      //  Compute_Glpha(y,Basic_Value.g,delta[i],Basic_Value.p);
-     //   Compute_G_Mul(tepm,tepm,y,Basic_Value.p);
-     //   mpz_add(rrr,R[i],Commit[i].r);
-     //   Compute_Glpha(y,Basic_Value.h,rrr,Basic_Value.p);
-     //   Compute_G_Mul(tepm,tepm,y,Basic_Value.p);
-     //   gmp_printf("Y[%d] is %Zd\n", i,tepm);
+	
     }
  
 
-   //用于生成V,得到V
+   //get V
    Check_Compute Compute[10];
     for(i = 0;i<10;i++)
     {
@@ -846,19 +730,19 @@ long sk;
 	mpz_set(Compute[i].r,Commit[i].r);
         Get_Vi(&Compute[i],32);
     }
-    //用于得到其它参数t，s
+    //get t，s
      Check_Value Value[10];
     for(i = 0;i<10;i++)
     {
         Init_Check_Value(&Value[i]);
-        //Get_Big_Number(Value[i].C,len);
+        
 	mpz_set_ui(Value[i].C,32);
         mpz_set(Value[i].P,Basic_Value.p);
         mpz_set(Value[i].Y,Y[i]);
-        //t，s在这一步生成
+        //t，s
         Get_T(&Value[i],&Compute[i],Basic_Value.g,galpha,Basic_Value.h);
     }
-    //验证阶段
+    //conform
     mpz_t Eta[10];
     mpz_t teta,gseta,yneta;
     mpz_init(teta);
